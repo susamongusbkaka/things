@@ -7,7 +7,16 @@ import httpx
 from fastapi import FastAPI,Header,HTTPException
 from pydantic import BaseModel,Field
 app=FastAPI(title="TITAN Cloud Bridge",docs_url=None,redoc_url=None,openapi_url=None)
-PROVIDERS={"mistral":("https://api.mistral.ai/v1","MISTRAL_API_KEY","TITAN_MISTRAL_MODEL"),"scaleway":("https://api.scaleway.ai/v1","SCW_SECRET_KEY","TITAN_SCW_MODEL")}
+# Verified from original-language provider documentation on 2026-10-28.
+# Adding providers does not assert credentials or successful inference.
+# Chinese providers use independent provider accounts: never equate these
+# to Scaleway-hosted models or to ten independently executed TITAN agents.
+PROVIDERS={
+    "mistral":("https://api.mistral.ai/v1","MISTRAL_API_KEY","TITAN_MISTRAL_MODEL"),
+    "scaleway":("https://api.scaleway.ai/v1","SCW_SECRET_KEY","TITAN_SCW_MODEL"),
+    "qwen_singapore":("https://dashscope-intl.aliyuncs.com/compatible-mode/v1","QWEN_SINGAPORE_API_KEY","TITAN_QWEN_MODEL"),
+    "deepseek":("https://api.deepseek.com/v1","DEEPSEEK_API_KEY","TITAN_DEEPSEEK_MODEL")
+}
 def authenticate(auth):
     key=os.getenv("TITAN_CONTROL_API_KEY","")
     if len(key)<32:raise HTTPException(503,"OWNER_AUTH_NOT_CONFIGURED")
