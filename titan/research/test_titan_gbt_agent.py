@@ -77,4 +77,30 @@ class TitanResearchTests(unittest.TestCase):
             self.assertEqual(result['status'],'NOT_VALIDATED_NO_TRADE')
             self.assertIsNone(result['chart'])
 
+    def test_manifest_ranks_single_winner_and_explains_competitor(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as d:
+            folder=Path(d)
+            items=[]
+            for symbol in ('EURUSD','GBPUSD'):
+                items.append({'symbol':symbol,'timeframe':'H4','csv':'dummy.csv',
+                    'htf_csv':'dummy_d1.csv','tick_size':.00001,'pip_size':.0001,
+                    'spread_pips':1.0,'slippage_pips':.2,'commission_pips':.2})
+            (folder/'manifest.json').write_text(json.dumps({'instruments':items}))
+            t=datetime(2026,1,1,tzinfo=timezone.utc)
+            dummy=[Candle(t+timedelta(hours=4*i),1.1,1.101,1.099,1.1,True,'unit') for i in range(40)]
+            def stub(candles,htf,symbol,timeframe,cfg,output,tick,costs,synthetic=False,render_chart=True):
+                score=85 if symbol=='EURUSD' else 70
+                return {'symbol':symbol,'candidate':{'score':score,'direction':'LONG',
+                    'cost_adjusted_rr_tp1_est':3.0,'score_breakdown':{'trend':25,'rr_tp1':20 if score==85 else 5}},
+                    'explanation':f'The provisional {symbol} rubric. Other findings.',
+                    'chart':output if render_chart else None}
+            with patch('titan_gbt_agent_v1_1.load_csv',return_value=dummy), \
+                 patch('titan_gbt_agent_v1_1.analyze',side_effect=stub):
+                result=scan_manifest(str(folder/'manifest.json'),Config(),str(folder/'winner.png'))
+            self.assertEqual(result['symbol'],'EURUSD')
+            self.assertEqual(result['ranked_alternatives'][0]['symbol'],'GBPUSD')
+            self.assertIn('closest eligible rival, GBPUSD',result['explanation'])
+            self.assertEqual(result['chart'],str(folder/'winner.png'))
+
 if __name__=='__main__': unittest.main()
