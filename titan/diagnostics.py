@@ -15,14 +15,14 @@ router=APIRouter()
 # All providers/models are candidates; availability MUST be demonstrated by inference.
 # Models and original ten canonical roles are deliberately distinct.
 NODES=(
-("MACRO_ANALYST","mistral","mistral-small-latest","MISTRAL_API_KEY","https://api.mistral.ai/v1","Europe"),
+("MACRO_ANALYST","mistral","mistral-small-2603","MISTRAL_API_KEY","https://api.mistral.ai/v1","Europe"),
 ("SECTOR_ANALYST","scaleway","gemma-4-26b-a4b-it","SCW_SECRET_KEY","https://api.scaleway.ai/v1","France"),
 ("ALT_DATA_ANALYST","alibaba","qwen3.8-max","DASHSCOPE_API_KEY","https://dashscope-intl.aliyuncs.com/compatible-mode/v1","Singapore"),
 ("STRUCTURAL_ANALYST","scaleway","qwen3.8-27b","SCW_SECRET_KEY","https://api.scaleway.ai/v1","France"),
 ("QUANT_ANALYST","scaleway","deepseek-v4.1-flash","SCW_SECRET_KEY","https://api.scaleway.ai/v1","France"),
 ("VOLATILITY_ANALYST","scaleway","glm-5.3","SCW_SECRET_KEY","https://api.scaleway.ai/v1","France"),
 ("SENTIMENT_ANALYST","siliconflow","deepseek-ai/DeepSeek-V3","SILICONFLOW_API_KEY","https://api.siliconflow.cn/v1","China"),
-("CROSS_ASSET_ANALYST","mistral","mistral-medium-latest","MISTRAL_API_KEY","https://api.mistral.ai/v1","Europe"),
+("CROSS_ASSET_ANALYST","mistral","mistral-medium-3-5","MISTRAL_API_KEY","https://api.mistral.ai/v1","Europe"),
 ("SEASONAL_ANALYST","scaleway","llama-3.3-70b-instruct","SCW_SECRET_KEY","https://api.scaleway.ai/v1","France"),
 ("GEOPOLITICAL_ANALYST","volcengine","doubao-seed-2-1-pro-260915","ARK_API_KEY","https://ark.cn-beijing.volces.com/api/v3","China"),
 )
@@ -60,6 +60,7 @@ async def probe_node(n,nonce,client,sem):
             actual=d.get("model")
             if not isinstance(content,str) or ("TITAN_HEALTH_"+nonce) not in content or not isinstance(rid,str) or len(rid)<8 or not isinstance(actual,str) or not actual:
                 raise ValueError("INFERENCE_RECEIPT_INCOMPLETE")
+            if actual != model:raise ValueError("PROVIDER_RETURNED_DIFFERENT_MODEL")
             result.update({"state":"REMOTE_INFERENCE_OBSERVED","reason":None,
                          "returned_model_id":actual,"provider_request_id":rid,
                          "observed_at_utc":datetime.now(timezone.utc).isoformat(),
@@ -85,7 +86,7 @@ async def probe_ten(authorization:str|None=Header(default=None)):
     seen=set()
     for x in results:
         if x["state"]=="REMOTE_INFERENCE_OBSERVED":
-            pair=(x["provider"],x["returned_model_id"])
+            pair=x["returned_model_id"].lower().split("/")[-1]
             if pair in seen:
                 x.update({"state":"BLOCKED","reason":"DUPLICATE_ACTUAL_MODEL_ID"})
             seen.add(pair)
