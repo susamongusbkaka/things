@@ -531,6 +531,19 @@ def scan_manifest(path: str, cfg: Config, output: str) -> dict:
                                        "score":x["result"]["candidate"]["score"]}
                                       for x in eligible[1:]]
     winning["input_errors"] = failures
+    if len(eligible) > 1:
+        runner = eligible[1]["result"]
+        b1 = winning["candidate"]["score_breakdown"]
+        b2 = runner["candidate"]["score_breakdown"]
+        factor = max(b1, key=lambda key: b1[key] - b2.get(key,0.0))
+        edge = b1[factor] - b2.get(factor,0.0)
+        opening, rest = winning["explanation"].split(". ", 1)
+        winning["explanation"] = (opening +
+            f"; the closest eligible rival, {runner['symbol']}, scored {runner['candidate']['score']:.1f}/100, "
+            f"with a {edge:+.1f}-point difference on {factor}. " + rest)
+    else:
+        opening, rest = winning["explanation"].split(". ", 1)
+        winning["explanation"] = opening + "; no other scanned instrument met the research filters. " + rest
     return winning
 
 
