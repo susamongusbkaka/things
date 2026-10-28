@@ -54,3 +54,5 @@ Run `python titan_gbt_agent_v1_1.py --manifest markets.json --output winner.png`
 ## Non-compliance / incomplete integration disclosure
 
 The code **does not** implement all 21 MT5 timeframes, all frozen TITAN strategy modules, price-side broker execution rules across instrument contracts, true cross-asset fundamentals, current event calendar, account exposure/margin, live data retrieval, independent ten-node signed agent receipts, six-phase independent validation, or forward/walk-forward profitability tests. The zone-detection thresholds, trend slope, scoring rubric, and cost-adjusted calculation are provisional research hypotheses. **No trade is validated or authorised by this module.** Do not deploy as a live strategy or connect to broker order endpoints.
+
+Eight offline unit tests currently pass, including batch ranking of two instruments and competitor explanation. This is not a historical market backtest.
