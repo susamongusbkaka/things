@@ -181,6 +181,8 @@ def load_manifest():
         if r["public_key_b64"] in seen_keys or r["endpoint"] in seen_urls:raise ValueError("NONINDEPENDENT_SIGNER")
         seen_keys.add(r["public_key_b64"]);seen_urls.add(r["endpoint"])
     research_models={(x["model_provider"],x["model_id"]) for x in rs}
+    if len(research_models)!=10:raise ValueError("TEN_DISTINCT_RESEARCH_MODELS_REQUIRED")
+    if any("latest" in str(x["model_id"]).lower() for x in rs):raise ValueError("UNPINNED_AGENT_MODEL")
     if (extra[0]["model_provider"],extra[0]["model_id"]) in research_models:raise ValueError("CRITIC_IS_NOT_DISTINCT")
     return m,wanted
 def signed_remote(s,snapshot,trail,seen):
@@ -246,6 +248,19 @@ def run_signed(x:SignedInput,authorization:str|None=Header(default=None)):
                 spec=next(r for r in m["agents"] if r["role"]==role)
                 trail.append(signed_remote(spec,snapshot,trail,seen));state["research_signatures"]+=1
             state["completed_phases"].append(phase)
+        votes={}
+        for item in trail:
+            direction=item["output"].get("stance")
+            if direction not in ("BULLISH","BEARISH","NEUTRAL"):
+                state["reason"]="MISSING_SIGNED_DIRECTION_VOTE";return state
+            votes[direction]=votes.get(direction,0)+1
+        if sum(votes.values())!=10:
+            state["reason"]="NOT_TEN_SIGNED_VOTES";return state
+        winner=max(votes,key=votes.get)
+        state["research_voting_counts"]=votes
+        if votes[winner]<6:
+            state["reason"]="NO_6_OF_10_SIGNED_MAJORITY";return state
+        state["majority_direction"]=winner
         trail.append(signed_remote(m["critic"],snapshot,trail,seen))
         state["other_signatures"]+=1;state["completed_phases"].append("DEVILS_ADVOCATE")
         for n in m["numerical_committee"]:
@@ -259,6 +274,8 @@ def run_signed(x:SignedInput,authorization:str|None=Header(default=None)):
         state["completed_phases"].append("RISK")
         cio=signed_remote(m["cio"],snapshot,trail,seen)
         state["other_signatures"]+=1;state["completed_phases"].append("CIO_CONSENSUS")
+        if cio["output"].get("stance")!=state["majority_direction"]:
+            state["reason"]="CIO_MAJORITY_MISMATCH";return state
         if cio["output"].get("decision")!="APPROVE_RESEARCH_ONLY":
             state["reason"]="CIO_VETO";return state
         if len(compact(trail))>1024*1024:
