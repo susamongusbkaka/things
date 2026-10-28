@@ -82,3 +82,4 @@ phases. Do not confuse ten model API probes with compliance with that protocol.
 ## Research-only protocol specifications
 
 - [SDRC-MTF 1.0: supply/demand candidate ranking and annotated candlestick report](protocols/SDRC_MTF_1_0.md). Documentation only; not deployed in the signed runner and does not modify the frozen trading rules or fail-closed gates.
+- [VSA-2 1.1: Mandatory top-two ranked asset real-candlestick charts with supply/demand, hypothetical entry/stop/target and JSON](protocols/VSA_DUAL_CHART_1_1.md). This supersedes only SDRC-MTF 1.0's one-chart reporting count; authentic OHLC and all fail-closed trading gates remain mandatory.
