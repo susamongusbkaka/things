@@ -1,0 +1,21 @@
+name: TITAN bridge fail-closed tests
+on:
+  push:
+    branches:
+      - titan-render-scaleway-mistral
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install -r titan/requirements.txt
+      - name: Test fail-closed bridge and model diagnostics
+        run: cd titan && python -m unittest discover -p 'test*.py' -v
