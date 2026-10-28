@@ -78,8 +78,9 @@ async def probe_ten(authorization:str|None=Header(default=None)):
     if any(urlparse(n[4]).scheme!="https" for n in NODES):
         raise HTTPException(503,"UNSAFE_PROVIDER_ENDPOINT")
     nonce=secrets.token_hex(16)
+    sem=asyncio.Semaphore(4)
     async with httpx.AsyncClient(timeout=25,follow_redirects=False) as client:
-        results=await asyncio.gather(*(probe_node(n,nonce,client,asyncio.Semaphore(4)) for n in NODES))
+        results=await asyncio.gather(*(probe_node(n,nonce,client,sem) for n in NODES))
     # Strict model-level uniqueness after inference, not merely ten API calls.
     seen=set()
     for x in results:
