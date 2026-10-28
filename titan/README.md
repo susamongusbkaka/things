@@ -82,3 +82,5 @@ phases. Do not confuse ten model API probes with compliance with that protocol.
 ## Research-only protocol specifications
 
 - [SDRC-MTF 1.0: supply/demand candidate ranking and annotated candlestick report](protocols/SDRC_MTF_1_0.md). Documentation only; not deployed in the signed runner and does not modify the frozen trading rules or fail-closed gates.
+
+- [CATPR-MTF 1.0: Cross-asset 3–10-session trend scanner, separate weighted WCS, strict asset taxonomy and proposed two-position correlation-risk exception](protocols/CATPR_MTF_1_0.md). Documentation only; the existing one-active-trade gate stays effective until any proposed exception is approved, integrated and audited.
