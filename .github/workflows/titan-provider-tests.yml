@@ -1,0 +1,24 @@
+name: TITAN international-provider safety tests
+on:
+  push:
+    branches: [titan-render-scaleway-mistral]
+    paths:
+      - 'titan/app.py'
+      - 'titan/test_app.py'
+      - 'titan/requirements.txt'
+      - '.github/workflows/titan-provider-tests.yml'
+permissions:
+  contents: read
+jobs:
+  provider-safety:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install approved dependencies
+        run: python -m pip install -r titan/requirements.txt
+      - name: Verify no-key, no-consensus fail-closed controls
+        run: cd titan && python -m unittest -v test_app
