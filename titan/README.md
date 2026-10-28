@@ -26,3 +26,55 @@ Runtime Python; build `pip install -r requirements.txt`; start `uvicorn app:app 
 3. Expose verified raw receipts (not counts only), and complete the numerical, adversarial, risk and CIO phases before approving any research conclusion.
 4. To prevent free-plan cold starts and sustain real monitoring, a suitable always-on hosting plan and independent scheduled probes are necessary. This code alone cannot guarantee 100% uptime.
 5. ChatGPT custom MCP onboarding/authorization remains an explicit separate connection step. A Render deployment by itself does not grant ChatGPT the right to call this protected endpoint.
+
+## International ten-node connection diagnostics (Chinese-language sources included)
+
+The **read-only diagnostics** extension registers ten immutable role-to-model candidates across
+Scaleway (France), Mistral (France), Alibaba Bailian (Singapore), SiliconFlow (China)
+and Volcano Engine Ark (China). These are ONLY model candidates; the registry does
+not say that the nodes are healthy, independent signers or participants in a
+research consensus.
+
+Protected routes:
+- `GET /v1/nodes/candidates`: show ten candidates and only whether credentials
+  are configured; `verified_live_nodes=0` because this is NOT a health check.
+- `POST /v1/nodes/probe-ten`: real, potentially billable health inferences,
+  available only if `TITAN_DIAGNOSTIC_PROBES_ENABLED=1` and authenticated
+  with `TITAN_CONTROL_API_KEY`. All providers get an unpredictable challenge;
+  require actual response content, real provider request ID, and exact pinned
+  model ID. Concurrency is limited to 4. Zero simulated passes.
+- No diagnostic endpoint can approve a security, forecast or trade.
+- No unsigned diagnostic counts can enter the signed TITAN consensus votes.
+
+Optional keys (not required to run the gateway in BLOCKED mode):
+`DASHSCOPE_API_KEY` (Alibaba Qwen international region),
+`SILICONFLOW_API_KEY` (SiliconFlow China),
+`ARK_API_KEY` (Volcano Engine Ark).
+`SCW_SECRET_KEY` and `MISTRAL_API_KEY` remain the original two providers.
+Keep keys only in Render secrets; never commit them. Chinese endpoints may involve
+cross-border data transfer; do not submit personal/account information or broker
+credentials. Regional Alibaba keys must match the API region.
+
+**Verified cloud check on 2026-10-28**:
+GitHub Actions CI succeeded and reached both Render `/health` endpoints.
+The bridge reported owner authentication unconfigured; both services reported
+model provider credentials unconfigured. It DID NOT demonstrate ten active agents
+or any signed financial research outcome.
+
+Provider references:
+- Alibaba (Chinese): https://www.alibabacloud.com/help/zh/model-studio/what-is-model-studio
+- Volcano Engine (Chinese): https://console.volcengine.com/ark/region%3Acn-beijing/docs/integrate-third-party-tools
+- SiliconFlow (Chinese): https://docs.siliconflow.cn/docs/usercases/use-siliconcloud-in-KiloCode
+- Scaleway catalog: https://www.scaleway.com/en/docs/generative-apis/reference-content/supported-models/
+- Mistral model lifecycle and pinning: https://docs.mistral.ai/inference/model-lifecycle
+- Render Free lifecycle: https://render.com/docs/free
+
+Do not use GitHub Models for inference; GitHub retired the service on
+2026-07-30 (https://github.blog/changelog/2026-07-30-github-models-is-now-retired/).
+GitHub Actions remains useful ONLY as an independent network/CI runner.
+
+**Current blocker:** Two public gateways are reachable, but none of the required
+owner/provider credentials has been verified as configured. The original signed
+gateway still requires an approved pinned manifest with ten distinct authenticated
+Ed25519 agent signers, independent numerical validators and the original risk/CIO
+phases. Do not confuse ten model API probes with compliance with that protocol.
