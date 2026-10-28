@@ -84,12 +84,11 @@ The ten agents are specialist roles and may not all produce comparable +/-1 vote
 
 ## 3. High-impact macro event hard veto
 
-Before **each short-term entry decision** (not just Monday), ingest current verified event times in UTC from authoritative calendars or central banks and tag impacted assets/currencies/sectors. Let `now_utc` be the timestamp of a real decision invocation, and `event_start_utc` the verified event start:
+Before **each short-term entry decision** (not just Monday), ingest current verified event times in UTC from authoritative calendars or central banks and tag impacted assets/currencies/sectors for research. The new two-hour veto applies **globally to all TITAN short-term new-trade decisions** whenever any qualifying high-impact event approaches, even when the candidate instrument is in a different asset class. Let `now_utc` be the timestamp of a real decision invocation, and `event_start_utc` the verified event start:
 
 ```python
 pre_event_veto = any(
     event.high_impact
-    and event.impacts(instrument)
     and 0 <= (event.start_utc - now_utc).total_seconds() <= 7200
     for event in verified_events
 )
@@ -98,7 +97,7 @@ trade_paused = pre_event_veto or event_in_progress_or_post_release_blackout or a
 
 The requested window of **two hours is an ADDITIONAL hard veto**. The established restrictions on event aftermath, high-impact times, earnings and metals are **not shortened**. Where a required event calendar cannot be verified or refreshed, or timestamps/impact flags are missing, mark `EVENT_DATA_UNVERIFIED` and fail closed; do not infer the absence of events. The veto is unconditional even when all 10 agents or all 4 local scorers agree.
 
-**Scope:** "ALL short-term trading is paused" means **new TITAN orders, increases, fresh signals and pending-order authorisation** on impacted market exposure. Existing protective stop orders and prudent manual position management should **not** be disabled or cancelled by an analysis-layer veto; this module is not an order-management controller. If a separately approved global all-instruments blackout exists, it prevails.
+**Scope:** "ALL short-term trading is paused" means **new TITAN orders, position increases, fresh entries and pending-order authorisations across ALL instrument classes**, not merely instruments directly exposed to the event. Existing protective stop orders and prudent manual position management must **not** be disabled or cancelled by an analysis-layer veto; this module is not an order-management controller. Any preexisting stricter blackout also prevails.
 
 ## 4. Decision precedence and returned audit
 
