@@ -66,3 +66,9 @@ async def research(x:Research,authorization:str|None=Header(default=None)):
 # Read-only probe registry: no trading or research authorization.
 from diagnostics import router as diagnostic_router
 app.include_router(diagnostic_router)
+
+
+# Real external-model analyst research is isolated from the legacy signed bridge.
+# No route in this module approves or places an order.
+from agent_runtime import router as analyst_router
+app.include_router(analyst_router)
