@@ -62,3 +62,7 @@ async def research(x:Research,authorization:str|None=Header(default=None)):
     except (httpx.HTTPError,ValueError,TypeError):return {"status":"BLOCKED","reason":"SIGNED_GATEWAY_UNAVAILABLE","verified_nodes":0,"trade_authorized":False}
     if d.get("status")=="RESEARCH_COMPLETE_MANUAL_ONLY":return {"status":"BLOCKED","reason":"RAW_SIGNED_RECEIPTS_NOT_EXPOSED","reported_signatures":d.get("research_signatures",0),"verified_nodes":0,"trade_authorized":False}
     return {"status":"BLOCKED","reason":"SIGNED_GATEWAY:"+str(d.get("reason","NO_VERIFIED_RESULT"))[:180],"verified_nodes":0,"trade_authorized":False}
+
+# Read-only probe registry: no trading or research authorization.
+from diagnostics import router as diagnostic_router
+app.include_router(diagnostic_router)
