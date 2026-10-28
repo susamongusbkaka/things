@@ -21,6 +21,18 @@ The user wants **both charts each time a completed ranked TITAN opportunity repo
 8. Under each image include (a) front-end JSON object with `asset`, `chart_elements {supply_zones[],demand_zones[],entry_price,stop_loss,take_profit}`, (b) 3–4 sentences explaining targeted/defended zone, mathematical entry/SL/TP rationale, precise invalidation and confirmation state, (c) score if genuinely available, else `Unverified`, and (d) citation to dated original OHLC sources. Return **both chart sections** with no extraneous market hype.
 9. Prefer exact requested text sequence: `### ASSET #1: [symbol] (WCS Score: [score/unverified])` -> image -> structural JSON -> short explanation, then same `### ASSET #2`. Never allow the strict report format to suppress a mandatory NO_TRADE / missing-data notice.
 
+## 1-line copyable trade levels and explanation (mandatory display formatting)
+
+For **each** ranked asset, immediately below its chart present **Entry, Stop Loss, Take Profit on exactly one plain-text copyable line** (prefer a one-line code block), followed **immediately by the concise 3–4 sentence structural explanation**. Example with NO invented prices:
+
+```text
+Entry: NOT VALIDATED | Stop Loss: NOT VALIDATED | Take Profit: NOT VALIDATED
+```
+
+When evidence actually supports an executable setup, use exact **instrument-side, price-unit and precision-aware figures**, and optionally prefix `BUY/SELL [SYMBOL]` before `Entry:`. Use `Take Profit 1:` and `Take Profit 2:` in the **same line** when both genuine validated targets exist. Keep any status (`NO TRADE` / `CONDITIONAL RESEARCH ONLY`) unambiguous next to the line and do not silently convert a hypothesis into an executable instruction. **Do not insert made-up numerical placeholders**, and do not label prices `VALIDATED` unless the existing six-phase, ten-external-agent, macro, structural, broker-last-mile cost, net >=2.5:1 and portfolio gates are met.
+
+The underlying full machine-readable structural JSON (if requested or required for downstream rendering) may follow the short explanation, without interrupting the **chart -> one-line levels -> explanation** reading sequence. This copyable line supersedes the earlier position of front-end JSON in the VSA 1.1 display order, *not* the data validation requirements or frozen TITAN risk rules.
+
 ## Chart and model distinctions
 
 - An observed chart-based swing area is only a **candidate** supply/demand zone; do not call it a confirmed unmitigated *institutional* block without evidence or independent zone-validation rule. Chart colours do not certify order flow.
