@@ -21,17 +21,20 @@ The user wants **both charts each time a completed ranked TITAN opportunity repo
 8. Under each image include (a) front-end JSON object with `asset`, `chart_elements {supply_zones[],demand_zones[],entry_price,stop_loss,take_profit}`, (b) 3–4 sentences explaining targeted/defended zone, mathematical entry/SL/TP rationale, precise invalidation and confirmation state, (c) score if genuinely available, else `Unverified`, and (d) citation to dated original OHLC sources. Return **both chart sections** with no extraneous market hype.
 9. Prefer exact requested text sequence: `### ASSET #1: [symbol] (WCS Score: [score/unverified])` -> image -> structural JSON -> short explanation, then same `### ASSET #2`. Never allow the strict report format to suppress a mandatory NO_TRADE / missing-data notice.
 
-## 1-line copyable trade levels and explanation (mandatory display formatting)
+## Stacked copyable trade levels and explanation (mandatory display formatting)
 
-For **each** ranked asset, immediately below its chart present **Entry, Stop Loss, Take Profit on exactly one plain-text copyable line** (prefer a one-line code block), followed **immediately by the concise 3–4 sentence structural explanation**. Example with NO invented prices:
+For **each** ranked asset, immediately below its chart display **Entry, Stop Loss, Take Profit 1, and Take Profit 2 (when available) as vertically STACKED separate lines**, in that order, within **one copyable text block or copyable card**. Follow the stacked prices **immediately** with the concise 3–4 sentence structural explanation. Do not arrange values side-by-side or use pipe-separated single-line text.
 
 ```text
-Entry: NOT VALIDATED | Stop Loss: NOT VALIDATED | Take Profit: NOT VALIDATED
+Entry: NOT VALIDATED
+Stop Loss: NOT VALIDATED
+Take Profit 1: NOT VALIDATED
+Take Profit 2: NOT VALIDATED
 ```
 
-When evidence actually supports an executable setup, use exact **instrument-side, price-unit and precision-aware figures**, and optionally prefix `BUY/SELL [SYMBOL]` before `Entry:`. Use `Take Profit 1:` and `Take Profit 2:` in the **same line** when both genuine validated targets exist. Keep any status (`NO TRADE` / `CONDITIONAL RESEARCH ONLY`) unambiguous next to the line and do not silently convert a hypothesis into an executable instruction. **Do not insert made-up numerical placeholders**, and do not label prices `VALIDATED` unless the existing six-phase, ten-external-agent, macro, structural, broker-last-mile cost, net >=2.5:1 and portfolio gates are met.
+When an actual validated setup exists, display exact symbol-side, quote-unit and precision-aware levels. Show BUY or SELL and the exact symbol as the title. If TP2 has no valid observed opposing zone, omit the TP2 row (do not fabricate it). Keep the separate status **NO TRADE**, **CONDITIONAL RESEARCH ONLY**, or **VALIDATED**, where justified. Never invent numeric prices or claim validation without the original six TITAN phases, ten independent signed external agent results, macro restrictions, structural stops and opposing targets, broker-last-mile costs, net minimum 2.5:1 R:R, and portfolio gates.
 
-The underlying full machine-readable structural JSON (if requested or required for downstream rendering) may follow the short explanation, without interrupting the **chart -> one-line levels -> explanation** reading sequence. This copyable line supersedes the earlier position of front-end JSON in the VSA 1.1 display order, *not* the data validation requirements or frozen TITAN risk rules.
+The optional underlying front-end JSON may follow the short explanation without interrupting the **chart -> stacked copyable levels -> explanation** reading order. This supersedes the earlier single-line price layout, not the data-validation rules or frozen risk rules.
 
 ## Chart and model distinctions
 
