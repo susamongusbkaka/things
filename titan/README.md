@@ -82,3 +82,4 @@ phases. Do not confuse ten model API probes with compliance with that protocol.
 ## Research-only protocol specifications
 
 - [SDRC-MTF 1.0: supply/demand candidate ranking and annotated candlestick report](protocols/SDRC_MTF_1_0.md). Documentation only; not deployed in the signed runner and does not modify the frozen trading rules or fail-closed gates.
+- [CCEE 1.0: Central Confluence & Execution Eligibility Engine (Ichimoku, S&D/S&R, Bollinger, 4-scorer WCS)](protocols/CCEE_1_0.md). Additive deterministic research protocol; not deployed, backtested, continuously monitoring or connected to an order broker. Existing six-phase, signed ten-agent and frozen risk vetoes still apply.
