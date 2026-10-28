@@ -82,3 +82,8 @@ phases. Do not confuse ten model API probes with compliance with that protocol.
 ## Research-only protocol specifications
 
 - [SDRC-MTF 1.0: supply/demand candidate ranking and annotated candlestick report](protocols/SDRC_MTF_1_0.md). Documentation only; not deployed in the signed runner and does not modify the frozen trading rules or fail-closed gates.
+
+
+## Ten-agent executable research (separate safe route)
+
+The optional authenticated \`/v1/analysts/research\` endpoint is documented in [AGENT_RUNTIME.md](AGENT_RUNTIME.md). It performs ten actual remote provider requests only when credentials, ten distinct service signing keys and \`TITAN_AGENT_RESEARCH_ENABLED=1\` are configured. Existing \`/v1/research\` behaviour remains fail-closed, and no research response can authorise a trade. Service signatures attest observed responses: they are **not provider-native signatures**. No production keys are in this public repository.
