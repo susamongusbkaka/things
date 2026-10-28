@@ -84,3 +84,4 @@ phases. Do not confuse ten model API probes with compliance with that protocol.
 - [SDRC-MTF 1.0: supply/demand candidate ranking and annotated candlestick report](protocols/SDRC_MTF_1_0.md). Documentation only; not deployed in the signed runner and does not modify the frozen trading rules or fail-closed gates.
 
 - [PMD-LTC 1.0: independently sourced current-year/month/day/hour market snapshots and independent ChatGPT/Gemini/Grok long-term LLM committee](protocols/PMD_LTC_1_0.md). Additive draft governance only; no live agents or data feeds claimed. Signed ten-agent architecture, six phases, frozen risk/execution gates and broker last-mile quote checks remain.
+- [HCR-MTF 1.0: hierarchical weekly LLM macro bias, independent ten-agent vote adjustment, and 2-hour Tier-1 event hard veto](protocols/HCR_MTF_1_0.md). Research-only specification; pending staged integration after PMD-LTC 1.0 and all frozen strategy, signed quorum and risk gates.
