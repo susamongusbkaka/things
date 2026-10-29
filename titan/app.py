@@ -66,3 +66,7 @@ async def research(x:Research,authorization:str|None=Header(default=None)):
 # Read-only probe registry: no trading or research authorization.
 from diagnostics import router as diagnostic_router
 app.include_router(diagnostic_router)
+
+# Cloud-first read-only research watchlist; never sends orders.
+from proactive_routes import router as proactive_router
+app.include_router(proactive_router)
