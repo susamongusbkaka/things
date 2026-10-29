@@ -1,0 +1,31 @@
+name: TITAN Proactive Research Tests
+on:
+  push:
+    branches:
+      - feature/titan-proactive-cloud-1-0
+  pull_request:
+    paths:
+      - "titan/**"
+      - ".github/workflows/titan-proactive-research.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-research-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install cloud bridge dependencies
+        run: pip install -r titan/requirements.txt
+      - name: Deterministic tests only (no vendor credentials or trades)
+        working-directory: titan
+        env:
+          TITAN_TWELVEDATA_API_KEY: ""
+          TITAN_CONTROL_API_KEY: ""
+        run: python -m unittest discover -p 'test*.py' -v
