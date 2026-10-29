@@ -87,3 +87,17 @@ phases. Do not confuse ten model API probes with compliance with that protocol.
 ## Ten-agent executable research (separate safe route)
 
 The optional authenticated \`/v1/analysts/research\` endpoint is documented in [AGENT_RUNTIME.md](AGENT_RUNTIME.md). It performs ten actual remote provider requests only when credentials, ten distinct service signing keys and \`TITAN_AGENT_RESEARCH_ENABLED=1\` are configured. Existing \`/v1/research\` behaviour remains fail-closed, and no research response can authorise a trade. Service signatures attest observed responses: they are **not provider-native signatures**. No production keys are in this public repository.
+
+
+## PACE-MTF 1.0 — custom anticipatory research overlay (Version 9, not a live signal)
+
+Authenticated read-only `POST /v1/anticipation/evaluate` applies a **Precursor → Acceptance → Context → Execution-gates** state machine to independently supplied, closed and UTC-stamped D1/H4/H1/M15 OHLC. The engine records a D1 compression warning before a later accepted 20-day breakout, then checks four Ichimoku clouds. It distinguishes `EARLY_WATCH`, `ARMED_AWAITING_ACCEPTANCE`, `D1_ACCEPTED_MTF_UNVERIFIED`, `MTF_CONFLICT`, and `MTF_CONFLUENCE_RESEARCH_ONLY`. A research-confluence finding is **not** a trade permission.
+
+The endpoint **always** returns `trade_authorized=false`, `orders_submitted=0`, `NOT VALIDATED — NO TRADE`. It cannot execute orders and does not modify legacy `/v1/research`, the separate independent ten-agent endpoint, original six phases or frozen risk controls. All external feed claims remain unauthenticated unless corroborated by an approved feed. Macro surprises and authentic order flow are future research inputs, never inferred from OHLC or counted as verified agent votes. The pilot's positive later-period result was inconclusive and selection-biased; it must not be used for live sizing or authorisation.
+
+- [PACE-MTF 1.0 protocol, state machine, inputs and limitations](protocols/PACE_MTF_1_0.md).
+- [Earlier exploratory study and limitations](research/PAST_PILOT_FINDINGS.md).
+- `pace_mtf.py` / `test_pace_mtf.py`: API research overlay and synthetic invariant tests.
+- `titan_v9_anticipation_research.py` / `test_titan_v9_anticipation.py`: historical D1 pilot runner and conservative simulator tests.
+
+Run `cd titan && python -m unittest discover -p 'test*.py' -v` in an isolated test environment. Deployment or merging must be separately approved, reviewed against the branch baseline, and followed by broker-quality OHLC + spread/slippage out-of-sample backtesting. **Do not use PACE to authorise an MT5 order.**
