@@ -79,7 +79,7 @@ class PaceInvariants(unittest.TestCase):
     def test_instant_outcome_invariant(self):
         self.assertEqual(evaluate(snapshot(),now=T)["decision"],"NOT VALIDATED — NO TRADE")
 
-if __name__=='__main__': unittest.main()
+
 
 # A hand-constructed price path is used ONLY to verify state transitions.
 # It is not offered as historical evidence of trading profitability.
@@ -138,3 +138,5 @@ class StateTransitions(unittest.TestCase):
             row["low"]-=1.5
         x=evaluate(d,now=T)
         self.assertFalse(x["research_confluence_observed"])
+
+if __name__=='__main__': unittest.main()
