@@ -7,7 +7,7 @@ from __future__ import annotations
 import asyncio
 import os
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from typing import Any
 import httpx
@@ -98,6 +98,10 @@ async def cloud_scan(symbols: list[str], client: httpx.AsyncClient | None = None
                 frames, metas = {}, {}
                 for tf in ("D1", "H4", "H1", "M15"):
                     frames[tf], metas[tf] = await _series(client, symbol, tf, key, as_of)
+                from proactive import timestamp
+                latest_intraday = timestamp(frames["M15"][-1]["time"])
+                if as_of - latest_intraday > timedelta(days=4):
+                    raise MarketDataError("STALE_INTRADAY_QUOTES")
                 meta = metas["H4"]
                 # Do not invent actual security names: vendor symbol+asset type only.
                 inst = {"name": str(meta.get("name") or symbol),
