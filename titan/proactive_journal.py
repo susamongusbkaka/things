@@ -42,7 +42,7 @@ def record_alert(db_path: str, alert: dict) -> str:
         raise ValueError("Missing source")
     with closing(connection(db_path)) as db:
         with db:
-            db.execute("INSERT INTO alerts VALUES (?,?,?,?,?,?,?, ?,NULL)",
+            db.execute("INSERT OR IGNORE INTO alerts VALUES (?,?,?,?,?,?,?, ?,NULL)",
                        (alert["alert_id"], alert["symbol"], alert["direction"],
                         stamp.isoformat(), alert["source"], alert["state"], close,
                         json.dumps(alert, sort_keys=True)))
