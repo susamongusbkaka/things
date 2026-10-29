@@ -72,3 +72,9 @@ app.include_router(diagnostic_router)
 # No route in this module approves or places an order.
 from agent_runtime import router as analyst_router
 app.include_router(analyst_router)
+
+
+# PACE-MTF V9: read-only, owner-authenticated anticipatory evidence overlay.
+# Does not modify /v1/research, six-phase quorum, or any frozen trading gate.
+from pace_mtf import router as pace_research_router
+app.include_router(pace_research_router)
